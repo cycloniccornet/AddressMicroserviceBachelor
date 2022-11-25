@@ -24,7 +24,7 @@ public class Country {
     private String countryName;
     
     @Column(name = "countryCode")
-    private int countryCode;
+    private String countryCode;
     
 
 
