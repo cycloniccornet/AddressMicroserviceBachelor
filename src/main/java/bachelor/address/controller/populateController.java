@@ -1,12 +1,8 @@
 package bachelor.address.controller;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-
-import javax.script.ScriptException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +14,8 @@ import bachelor.address.model.City;
 import bachelor.address.model.Country;
 import bachelor.address.model.DkAddressDTO;
 import bachelor.address.model.Street;
-import bachelor.address.service.CityServiceImpl;
+import bachelor.address.service.CityService;
 import bachelor.address.service.CountryService;
-import bachelor.address.service.CountryServiceImpl;
 import bachelor.address.service.DataforsyningenApi;
 
 @RestController
@@ -28,7 +23,7 @@ import bachelor.address.service.DataforsyningenApi;
 public class populateController {
     
     @Autowired
-    CityServiceImpl cityServiceImpl;
+    CityService cityService;
     @Autowired
     CountryService countryService;
     @Autowired
@@ -39,8 +34,7 @@ public class populateController {
         try {
             DkAddressDTO[] addressList = dataforsyningenApi.fetchCityByStreetFromDataforsyningenApi("Ellemosevej");
             
-            Set<City> cities = new HashSet<City>();
-            
+            List<City> cities = new ArrayList<City>();
             Country newCountry = new Country();
             
             for (int i = 0; i < addressList.length; i++) {
@@ -50,10 +44,12 @@ public class populateController {
                     newCountry = new Country(UUID.randomUUID(), addressList[i].getCountryName(), addressList[i].getCountryCode());
                     countryService.createcountry(newCountry); 
                 }
-                if(countryExist) {newCountry = countryService.findBCountryName(addressList[i].getCountryName());}
+                if(countryExist) {newCountry = countryService.findByCountryNameObject(addressList[i].getCountryName());}
                 //Country newCountry = new Country(UUID.randomUUID(), addressList[i].getCountryName(), addressList[i].getCountryCode());
                 
+                
             }
+
         } catch (Exception e) {
             // TODO: handle exception
             System.out.println(e);
@@ -61,5 +57,40 @@ public class populateController {
             
         return null;
     }
+
+    @GetMapping("/addCityToDbByPostalCode")
+    public ResponseEntity<Object> populateDBFromPostalCode() {
+        try {
+            DkAddressDTO[] dkAddressDTOs = dataforsyningenApi.fetchCityByStreetFromDataforsyningenApi("2900"); //TODO: CHange metod to use int
+            
+            List<Street> streets = new ArrayList<Street>();
+            Country newCountry = new Country();
+            
+            for (int i = 0; i < dkAddressDTOs.length; i++) {
+
+                Boolean countryExist = countryService.findByCountryName(dkAddressDTOs[i].getCountryName()).isPresent();
+                if (!countryExist) { 
+                    newCountry = new Country(UUID.randomUUID(), dkAddressDTOs[i].getCountryName(), dkAddressDTOs[i].getCountryCode());
+                    countryService.createcountry(newCountry); 
+                }
+                if(countryExist) {newCountry = countryService.findByCountryNameObject(dkAddressDTOs[i].getCountryName());}
+                //Country newCountry = new Country(UUID.randomUUID(), addressList[i].getCountryName(), addressList[i].getCountryCode());
+            }
+            
+
+            for (int j = 0; j < dkAddressDTOs.length; j++) {
+                streets.add( new Street(dkAddressDTOs[j].getStreetName()));
+            }
+            
+
+            cityService.createCity(new City(newCountry.getCountryId(), newCountry, dkAddressDTOs[0].getCityName(), dkAddressDTOs[0].getPostalCode(), dkAddressDTOs[0].getRegion(), streets));        
+        } catch (Exception e) {
+            // TODO: handle exception
+            System.out.println(e);
+        }
+            
+        return null;
+    }
+
 
 }

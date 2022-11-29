@@ -3,7 +3,6 @@ package bachelor.address.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +28,18 @@ public class CountryServiceImpl implements CountryService {
                 .save(country);
 
         return _country;
+    }
+
+    @Override
+    public Country findByCountryNameObject(String countryName) {
+        
+        return countryRepository.findByCountryName(countryName);
+    }
+
+    @Override
+    public Optional<Country> findByCountryName(String countryName) {
+        // TODO Auto-generated method stub
+        return Optional.empty();
     }
     
 

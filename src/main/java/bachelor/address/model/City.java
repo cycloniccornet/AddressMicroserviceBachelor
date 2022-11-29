@@ -1,20 +1,18 @@
 package bachelor.address.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
+
 import javax.persistence.*;
 
 import org.springframework.data.relational.core.mapping.Embedded.Nullable;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
  @Entity annotation indicates that the class is a persistent Java class.
@@ -51,12 +49,13 @@ public class City {
   @Column(name = "region")
   private String region;
 
-  @OneToMany(mappedBy = "cityId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  private List<Address> address;
-  //@ManyToMany(mappedBy = "cities", fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
-  //@EqualsAndHashCode.Exclude
-  //@OneToMany(mappedBy = "cityId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-  //private List<Address> addresss;
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @JoinTable(name = "city_street", 
+             joinColumns = { @JoinColumn(name = "city_id") }, 
+             inverseJoinColumns = {@JoinColumn(name = "street_id") }, 
+             uniqueConstraints = {@UniqueConstraint(columnNames = { "street_id", "city_id" }) }
+  )
+  private List<Street> streets;
 
 
 

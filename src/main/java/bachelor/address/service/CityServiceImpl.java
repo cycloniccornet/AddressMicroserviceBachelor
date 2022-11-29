@@ -42,4 +42,8 @@ public class CityServiceImpl implements CityService {
         return _city;
     }
 
+    public List<City> saveACities(List<City> cities) {
+        return cityRepository.saveAll(cities);
+    }
+
 }

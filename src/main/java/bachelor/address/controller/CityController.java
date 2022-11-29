@@ -39,8 +39,7 @@ public class CityController {
     @PostMapping("/")
     public ResponseEntity<City> createCity(@RequestBody City city) {
         try {
-            System.out.println("\n\n KOMMER VI HER");
-            System.out.println(city);
+            
             City newCity = cityServiceImpl.createCity(city);
 
             return new ResponseEntity<>(newCity, HttpStatus.CREATED);
