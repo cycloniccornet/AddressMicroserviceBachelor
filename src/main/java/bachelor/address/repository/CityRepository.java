@@ -9,5 +9,5 @@ import bachelor.address.model.City;
 
 @Repository
 public interface CityRepository extends JpaRepository<City, UUID>{
-    
+    public City findByCityName(String cityName);
 }

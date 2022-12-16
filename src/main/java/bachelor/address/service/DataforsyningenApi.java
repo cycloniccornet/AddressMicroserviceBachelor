@@ -1,14 +1,19 @@
 package bachelor.address.service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import javax.script.ScriptException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import bachelor.address.model.Country;
 import bachelor.address.model.DkAddressDTO;
 
 @Service
@@ -20,18 +25,16 @@ public class DataforsyningenApi {
 
     // Checking whether the JSON array has some value or not
 
-    public DkAddressDTO[] fetchCityByStreetFromDataforsyningenApi(String streetName) throws ScriptException {
-        DkAddressDTO[] dkAddressDTOs;
+    public List<DkAddressDTO> fetchCityByStreetFromDataforsyningenApi(String postalCode) throws ScriptException {
         
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String jsonArray = restTemplate.getForObject("http://localhost:8006/dk/address/" + streetName, String.class); //TODO: Change Hardcoded URL to Eurika lookup
-
+            String jsonArray = restTemplate.getForObject("http://localhost:8006/dk/address/" + postalCode, String.class); //TODO: Change Hardcoded URL to Eurika lookup
+            //System.out.println("Data: " + jsonArray + "\n\n\n");
             final ObjectMapper objectMapper = new ObjectMapper();
-            dkAddressDTOs = objectMapper.readValue(jsonArray, DkAddressDTO[].class);
+            return objectMapper.readValue(jsonArray, new TypeReference<List<DkAddressDTO>>(){});
             //System.out.println(dkAddressDTOs[0].getCityName());
 
-            return dkAddressDTOs;
         } catch (Exception e) {
             System.out.println(e);
             return null;
@@ -60,15 +63,7 @@ public class DataforsyningenApi {
 
     public static void main(String[] args) {
 
-        DataforsyningenApi dataforsyningenApi = new DataforsyningenApi();
 
-        try {
-            DkAddressDTO[] addressList = dataforsyningenApi.fetchCityByStreetFromDataforsyningenApi("Søndre Fasanvej");
-            System.out.println(addressList[0]);
-
-        } catch (ScriptException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+      
     }
 }

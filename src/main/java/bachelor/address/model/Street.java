@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -41,12 +42,19 @@ public class Street {
     @Column(name = "street_name")
     private String streetName;
 
+   /*  @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "address_id")
+    private Address address_fk; */
+
     @EqualsAndHashCode.Exclude
-    @ManyToMany(mappedBy = "streets", fetch = FetchType.EAGER, cascade = CascadeType.DETACH)
+    @ManyToMany(mappedBy = "streets", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Set<City> cities;
 
     public Street(String streetName) {
         this.streetName = streetName;
+    }
+
+    public Street(UUID streetId2, String streetName2) {
     }
 
 

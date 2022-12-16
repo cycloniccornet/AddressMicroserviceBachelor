@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 import javax.persistence.*;
 
+import org.springframework.data.relational.core.mapping.Embedded.Nullable;
 
 @Entity
 @Data
@@ -20,12 +21,21 @@ public class Address {
     @Column(name = "address_id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")
     private UUID addressId;
 
-    @OneToOne(cascade = CascadeType.DETACH)
-    @JoinColumn(name = "street_id", referencedColumnName = "street_id")
-    Street street;
-    
+    @Column(name = "street_number")
     private String streetNumber;
-    private int floor;
+
+    @Nullable
+    @Column(name = "floor")
+    private String floor;
+
+    @Column(name = "additinal_info")
     private String additinalInfo;
+
+    @Column(name = "street_designation")
+    private String streetDesignation;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "street_id", referencedColumnName = "street_id")
+    private Street street;
 
 }

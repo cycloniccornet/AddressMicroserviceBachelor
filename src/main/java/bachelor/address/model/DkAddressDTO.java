@@ -6,10 +6,11 @@ import lombok.Data;
 
 @Data
 public class DkAddressDTO implements Serializable {
-    
+
+    String id;
     String floor;
     String door;
-    int houseNr;
+    String houseNr;
     String countryName;
     String countryCode;
     String streetDesignation;

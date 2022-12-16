@@ -30,6 +30,12 @@ public class StreetServiceImpl implements StreetService {
         return _street;
     }
 
+    /* public Street findByStreetName(String streetName) {
+        return streetRepository.findByStreetName(streetName);
+    } */
 
-
+    @Override
+    public Street findByStreetNameObject(String streetName) {
+        return streetRepository.findStreetByStreetName(streetName);
+    };
 }

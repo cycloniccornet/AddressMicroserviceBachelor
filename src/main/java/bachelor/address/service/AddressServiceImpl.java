@@ -1,6 +1,7 @@
 package bachelor.address.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import bachelor.address.model.Address;
@@ -17,8 +18,8 @@ public class AddressServiceImpl implements AddressService {
     AddressRepository addressRepository;
 
     @Override
-    public ResponseEntity<Address> findAddressById(UUID addressId) {
-        return null;
+    public Optional<Address> findAddressById(UUID addressId) {
+        return addressRepository.findById(addressId);
     }
 
     @Override
@@ -26,6 +27,20 @@ public class AddressServiceImpl implements AddressService {
         List<Address> allAddress =  addressRepository.findAll();
         return allAddress;
     }
+
+    public Address findByStreetDesignation(String streetDesignation) {
+        return addressRepository.findByStreetDesignation(streetDesignation);
+    }
+
+    @Override
+    public Address createAddress(Address address) {
+        Address _address = addressRepository
+                .save(address);
+
+        return _address;
+    }
+
+    
 
     
     

@@ -10,4 +10,5 @@ import bachelor.address.model.Street;
 
 @Repository
 public interface StreetRepository extends JpaRepository<Street, UUID> {
+    public Street findStreetByStreetName(String streetName);
 }

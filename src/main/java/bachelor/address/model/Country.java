@@ -20,6 +20,9 @@ import lombok.NoArgsConstructor;
 @Table(name = "country")
 public class Country {
 
+    public Country(String countryName2, String countryCode2) {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "country_id", nullable = false, columnDefinition = "UUID default gen_random_uuid()")

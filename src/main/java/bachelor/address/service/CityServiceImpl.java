@@ -42,8 +42,16 @@ public class CityServiceImpl implements CityService {
         return _city;
     }
 
-    public List<City> saveACities(List<City> cities) {
+    public List<City> saveAllCities(List<City> cities) {
         return cityRepository.saveAll(cities);
+    }
+
+
+
+    @Override
+    public City findCityByCityname(String cityName) {
+        
+        return cityRepository.findByCityName(cityName);
     }
 
 }

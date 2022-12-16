@@ -36,7 +36,7 @@ public class City {
   private UUID cityId;
 
   @Nullable
-  @OneToOne(cascade = CascadeType.DETACH)
+  @OneToOne(cascade = CascadeType.ALL) //Her
   @JoinColumn(name = "country_id", referencedColumnName = "country_id")
   private Country country_fk;
 
@@ -49,7 +49,7 @@ public class City {
   @Column(name = "region")
   private String region;
 
-  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(name = "city_street", 
              joinColumns = { @JoinColumn(name = "city_id") }, 
              inverseJoinColumns = {@JoinColumn(name = "street_id") }, 
